@@ -7,9 +7,9 @@ Analysis of survey responses
 ## Install & Run
 
 ```
-git clone REPO-URl
+git clone git@github.com:mansdahlstrom1/kandidatAnalys.git <name-of-your-project>
 
-cd <Name of your project>
-npm i
+cd <name-of-your-project>
+npm install
 npm run calc
 ```
