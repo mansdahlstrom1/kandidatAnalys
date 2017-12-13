@@ -8,6 +8,7 @@ function print(data, output) {
 }
 
 function getAvg(data){
+  console.log('# TOTAL average of the survay')
   const output = {
     avgAge: 0,
     avg_q1: 0,
@@ -152,12 +153,17 @@ function getDifferancePerQuestion(data) {
     }
 
   })
-  console.log(LowOutput)
-  console.log(HighOutput);
+  console.log("# get differance per question");
+  console.log("### Higest and lowest valye per question")
   Object.keys(output).map(key => {
     console.log('---', key, '---')
     console.log(output[key]);
   })
+  console.log("### Count of persons responding with the lowest recorded value")
+  console.log(LowOutput)
+  console.log("### Count of persons responding with the high recorded value")
+  console.log(HighOutput);
+  
   return output;
 }
 
@@ -194,6 +200,7 @@ function groupByUsage(data){
     }
     return item;
   });
+  console.log("# get average per group");
   Object.keys(output).map(key => {
     console.log('---', key, '---')
     console.log('Count: ', output[key].count);
@@ -209,8 +216,9 @@ function groupByUsage(data){
 function printComments(data){
   // Abc is placeholder data; since ther parser will not accept 
   // empty rows as a valid object. 
+  console.log("# print all comments");
   const comments = data.filter(item => item.Res9 !== 'abc');
-  console.log(comments.map(item => console.log(item.Res9)))
+  comments.map(item => console.log(item.Res9));
 }
 
 const age1 = data.filter(item => Number(item.Age) <= 29);
@@ -221,6 +229,6 @@ const test4 = data.filter(item => Number(item.Res8) === 1);
 
 console.log('---- ALL ----');
 getAvg(data);
-// groupByUsage(data);
-
+groupByUsage(data);
+printComments(data);
 getDifferancePerQuestion(data);
