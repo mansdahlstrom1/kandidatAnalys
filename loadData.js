@@ -1,7 +1,14 @@
-var fs = require('fs');
-var parse = require('csv-parse');
+const fs = require('fs');
+const parse = require('csv-parse');
 
-var input = fs.readFileSync('./responses.csv');
+const fileToLoad = process.argv[1];
+
+if (!fileToLoad) {
+  console.error("Usage node loadData.js <FileToLoad>");
+  process.exit(1);
+}
+
+const input = fs.readFileSync(fileToLoad);
 const options = {
   columns: true,
   auto_parse: true,
@@ -23,5 +30,3 @@ const res = parse(input, options, (err, data) => {
     console.log('data loaded into data.json');
   });
 });
-
-
