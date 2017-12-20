@@ -1,12 +1,5 @@
 const data = require('./data.json');
 
-function print(data, output) {
-  console.log('Number of people', data.length);
-  Object.keys(output).map(key => {
-    console.log(key, (output[key] / data.length).toFixed(2));
-  })
-}
-
 function getAvg(data){
   console.log('# TOTAL average of the survay')
   const output = {
@@ -32,7 +25,10 @@ function getAvg(data){
     output.avg_q7 += item.Res7;
     output.avg_q8 += item.Res8;
   })
-  print(data, output);
+  Object.keys(output).map(item => {
+    output[item] = Number((output[item] / data.length).toFixed(2));
+  })
+  return output;
 }
 
 function getDifferancePerQuestion(data) {
@@ -151,24 +147,35 @@ function getDifferancePerQuestion(data) {
     if (item.Res8 === output['q8'].low) {
       LowOutput.q8 += 1;
     }
+  });
 
-  })
-  console.log("# get differance per question");
-  console.log("### Higest and lowest valye per question")
-  Object.keys(output).map(key => {
-    console.log('---', key, '---')
-    console.log(output[key]);
-  })
-  console.log("### Count of persons responding with the lowest recorded value")
-  console.log(LowOutput)
-  console.log("### Count of persons responding with the high recorded value")
-  console.log(HighOutput);
+  output['NumberOfLowest'] = LowOutput;
+  output['NumberOfHighest'] = HighOutput;
   
+  return output;
+}
+
+function getMedian(data) {
+  const output = [];
+  ['res1', 'Res2', 'Res3', 'Res4', 'Res5', 'Res6', 'Res7', 'Res8'].map(item => {
+    const sortedRes = data.sort((a, b) => {
+      return a[item] - b[item];
+    });
+  
+    if (data.length % 2 === 0)  { // even number
+      const first = sortedRes[Math.floor(data.length / 2)][item];
+      const second = sortedRes[Math.ceil(data.length / 2)][item];
+      output[item] = (first + second) / 2
+    } else {
+      output[item] = sortedRes[(data.length / 2) + .5][item];
+    }
+  });
   return output;
 }
 
 function groupByUsage(data){
   const output = [];
+
   data.map(item => {
     if (!output[item.Usage]) {
       output[item.Usage] = {
@@ -221,6 +228,38 @@ function printComments(data){
   comments.map(item => console.log(item.Res9));
 }
 
+function getStandardDeviation(data) {
+  const avg = getAvg(data);
+  const deviation = data.reduce((acc, item) => {
+    // Sum every awnser after subracting the awsner value with the avg squared
+    // for that question . 
+    return {
+      q1: acc.q1 + Math.pow(item.res1 - avg.avg_q1, 2),
+      q2: acc.q2 + Math.pow(item.Res2 - avg.avg_q2, 2),
+      q3: acc.q3 + Math.pow(item.Res3 - avg.avg_q3, 2),
+      q4: acc.q4 + Math.pow(item.Res4 - avg.avg_q4, 2),
+      q5: acc.q5 + Math.pow(item.Res5 - avg.avg_q5, 2),
+      q6: acc.q6 + Math.pow(item.Res6 - avg.avg_q6, 2),
+      q7: acc.q7 + Math.pow(item.Res7 - avg.avg_q7, 2),
+      q8: acc.q8 + Math.pow(item.Res7 - avg.avg_q8, 2),
+    }
+  }, {
+    q1: 0,
+    q2: 0,
+    q3: 0,
+    q4: 0,
+    q5: 0,
+    q6: 0,
+    q7: 0,
+    q8: 0,
+  });
+  const standardDiviation = {};
+  Object.keys(deviation).map(item => {
+    standardDiviation[item] = Number(Math.sqrt(deviation[item] / data.length).toFixed(2));
+  })
+  return standardDiviation;
+}
+
 const age1 = data.filter(item => Number(item.Age) <= 29);
 const age2 = data.filter(item => Number(item.Age) < 40 && Number(item.Age) >= 30);
 const age3 = data.filter(item => Number(item.Age) >= 40);
@@ -228,7 +267,15 @@ const test4 = data.filter(item => Number(item.Res8) === 1);
 
 
 console.log('---- ALL ----');
-getAvg(data);
-groupByUsage(data);
-printComments(data);
-getDifferancePerQuestion(data);
+const avg = getAvg(data);
+const usage = groupByUsage(data);
+const diff =  getDifferancePerQuestion(data);
+const median = getMedian(data);
+const standardDiviation = getStandardDeviation(data);
+
+
+console.log(avg)
+console.log(median);
+console.log(diff);
+console.log(standardDiviation);
+// printComments(data);

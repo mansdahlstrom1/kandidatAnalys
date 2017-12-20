@@ -1,14 +1,14 @@
 const fs = require('fs');
 const parse = require('csv-parse');
 
-const fileToLoad = process.argv[1];
+// const fileToLoad = process.argv[1];
 
-if (!fileToLoad) {
-  console.error("Usage node loadData.js <FileToLoad>");
-  process.exit(1);
-}
+// if (!fileToLoad) {
+//   console.error("Usage node loadData.js <FileToLoad>");
+//   process.exit(1);
+// }
 
-const input = fs.readFileSync(fileToLoad);
+const input = fs.readFileSync('./responses_complete.csv');
 const options = {
   columns: true,
   auto_parse: true,
