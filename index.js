@@ -260,22 +260,87 @@ function getStandardDeviation(data) {
   return standardDiviation;
 }
 
-const age1 = data.filter(item => Number(item.Age) <= 29);
-const age2 = data.filter(item => Number(item.Age) < 40 && Number(item.Age) >= 30);
-const age3 = data.filter(item => Number(item.Age) >= 40);
+function getAppsUsed(data) {
+  const output = [];
+  let multiChoice = 0;
+  data.map((item, i) => {
+    const apps = item.Apps.split(',');
+    if (apps.length > 1) {
+      multiChoice += 1;
+    }
+    apps.map(appName => {
+      const name = appName.toLowerCase().trim().replace("\'", "").toString();
+      if (name.indexOf('garmin') > -1) {
+        if (output['garmin']) {
+          output['garmin'] += 1;
+        } else {
+          output['garmin'] = 1;
+        }
+        return;
+      }
+
+      if (name.indexOf('samsung') > -1) {
+        if (output['samsung health']) {
+          output['samsung health'] += 1;
+        } else {
+          output['samsung health'] = 1;
+        }
+        return;
+      } 
+
+      if (name.indexOf('polar') > -1) {
+        if (output['polar']) {
+          output['polar'] += 1;
+        } else {
+          output['polar'] = 1;
+        }
+        return;
+      } 
+      
+      if (!output[name]) {
+        output[name] = 0;
+      } 
+      output[name] += 1;
+    })
+  });
+  const fullOutput = {
+    other: 0,
+  }
+  Object.keys(output).map((key) => {
+    if (output[key] >= 5) {
+      fullOutput[key] = output[key];
+    } else {
+      fullOutput['other'] += 1
+    }
+  });
+  console.log("mutliChoice", multiChoice);
+  console.log(fullOutput);
+}
+
+
+// FIlter data functions
+const lessThen20 = data.filter(item => Number(item.Age) < 20 && Number(item.Age) >= 0);
+const age20to29 = data.filter(item => Number(item.Age) < 30 && Number(item.Age) >= 20);
+const age30to39 = data.filter(item => Number(item.Age) < 40 && Number(item.Age) >= 30);
+const age40to49 = data.filter(item => Number(item.Age) < 50 && Number(item.Age) >= 40);
+const age50to59 = data.filter(item => Number(item.Age) < 60 && Number(item.Age) >= 50);
+const olderThen60 = data.filter(item => Number(item.Age) >= 60);
 const test4 = data.filter(item => Number(item.Res8) === 1);
 
+const runkeeper = data.filter(item => item.Apps.indexOf('Runkeeper') > -1);
+console.log(olderThen60);
 
-console.log('---- ALL ----');
 const avg = getAvg(data);
-const usage = groupByUsage(data);
+// const usage = groupByUsage(data);
 const diff =  getDifferancePerQuestion(data);
 const median = getMedian(data);
 const standardDiviation = getStandardDeviation(data);
 
-
+const avgRunkeeper = getAvg(runkeeper);
+//getAppsUsed(data);
+// console.log(avgRunkeeper);
 console.log(avg)
 console.log(median);
-console.log(diff);
+// console.log(diff);
 console.log(standardDiviation);
 // printComments(data);
