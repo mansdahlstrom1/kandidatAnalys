@@ -158,9 +158,7 @@ function getDifferancePerQuestion(data) {
 function getMedian(data) {
   const output = [];
   ['res1', 'Res2', 'Res3', 'Res4', 'Res5', 'Res6', 'Res7', 'Res8'].map(item => {
-    const sortedRes = data.sort((a, b) => {
-      return a[item] - b[item];
-    });
+    const sortedRes = data.sort((a, b) => a[item] - b[item]);
   
     if (data.length % 2 === 0)  { // even number
       const first = sortedRes[Math.floor(data.length / 2)][item];
@@ -190,7 +188,6 @@ function groupByUsage(data){
         avg_q8: 0,
         count: 0,
       }
-      return item;
     }
     const obj = output[item.Usage]
     output[item.Usage] = {
@@ -319,28 +316,49 @@ function getAppsUsed(data) {
 
 
 // FIlter data functions
-const lessThen20 = data.filter(item => Number(item.Age) < 20 && Number(item.Age) >= 0);
-const age20to29 = data.filter(item => Number(item.Age) < 30 && Number(item.Age) >= 20);
+const youngerThen29 = data.filter(item => Number(item.Age) < 30 && Number(item.Age) >= 20);
 const age30to39 = data.filter(item => Number(item.Age) < 40 && Number(item.Age) >= 30);
 const age40to49 = data.filter(item => Number(item.Age) < 50 && Number(item.Age) >= 40);
-const age50to59 = data.filter(item => Number(item.Age) < 60 && Number(item.Age) >= 50);
-const olderThen60 = data.filter(item => Number(item.Age) >= 60);
-const test4 = data.filter(item => Number(item.Res8) === 1);
+const olderThen50 = data.filter(item => Number(item.Age) >= 50);
 
-const runkeeper = data.filter(item => item.Apps.indexOf('Runkeeper') > -1);
-console.log(olderThen60);
+const q7low = data.filter(item => Number(item.Res7) < 4);
+const q7mid = data.filter(item => Number(item.Res7) >= 4 && Number(item.Res7) <= 7);
+const q7high = data.filter(item => Number(item.Res7) > 7);
 
-const avg = getAvg(data);
+
+// console.log(q7low.length, getAvg(q7low));
+// console.log(q7mid.length, getAvg(q7mid));
+// console.log(q7high.length, getAvg(q7high));
+
+// console.log("low")
+// groupByUsage(q7low)
+// console.log("mid")
+// groupByUsage(q7mid)
+// console.log("high")
+// groupByUsage(q7high)
+// console.log(data.length);
+const avg = getAvg(youngerThen29);
+const avg1 = getAvg(age30to39);
+const avg2 = getAvg(age40to49);
+const avg3 = getAvg(olderThen50);
+
 // const usage = groupByUsage(data);
 const diff =  getDifferancePerQuestion(data);
 const median = getMedian(data);
 const standardDiviation = getStandardDeviation(data);
 
-const avgRunkeeper = getAvg(runkeeper);
+
+console.log(avg);
+console.log(avg1);
+console.log(avg2);
+console.log(avg3);
+
+// const avgRunkeeper = getAvg(runkeeper);
+// console.log(avgRunkeeper);
 //getAppsUsed(data);
 // console.log(avgRunkeeper);
-console.log(avg)
-console.log(median);
+// console.log(avg)
+// console.log(median);
 // console.log(diff);
-console.log(standardDiviation);
+// console.log(standardDiviation);
 // printComments(data);
