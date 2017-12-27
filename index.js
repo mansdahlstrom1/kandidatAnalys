@@ -325,7 +325,11 @@ const q7low = data.filter(item => Number(item.Res7) < 4);
 const q7mid = data.filter(item => Number(item.Res7) >= 4 && Number(item.Res7) <= 7);
 const q7high = data.filter(item => Number(item.Res7) > 7);
 
+const lessThen7 = q7mid.concat(q7low);
+console.log(q7low.length, q7mid.length);
+console.log(lessThen7.length);
 
+console.log(getAvg(lessThen7));
 // console.log(q7low.length, getAvg(q7low));
 // console.log(q7mid.length, getAvg(q7mid));
 // console.log(q7high.length, getAvg(q7high));
