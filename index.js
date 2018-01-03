@@ -1,7 +1,6 @@
 const data = require('./data.json');
 
 function getAvg(data){
-  console.log('# TOTAL average of the survay')
   const output = {
     avgAge: 0,
     avg_q1: 0,
@@ -218,7 +217,7 @@ function groupByUsage(data){
 }
 
 function printComments(data){
-  // Abc is placeholder data; since ther parser will not accept 
+  // Abc is placeholder data; since the parser will not accept 
   // empty rows as a valid object. 
   console.log("# print all comments");
   const comments = data.filter(item => item.Res9 !== 'abc');
@@ -267,6 +266,9 @@ function getAppsUsed(data) {
     }
     apps.map(appName => {
       const name = appName.toLowerCase().trim().replace("\'", "").toString();
+      // Custom rules to make sure differant way to respondes respons
+      // is interpreted correctly 
+
       if (name.indexOf('garmin') > -1) {
         if (output['garmin']) {
           output['garmin'] += 1;
@@ -325,44 +327,49 @@ const q7low = data.filter(item => Number(item.Res7) < 4);
 const q7mid = data.filter(item => Number(item.Res7) >= 4 && Number(item.Res7) <= 7);
 const q7high = data.filter(item => Number(item.Res7) > 7);
 
+const q1lowest = data.filter(item => Number(item.res1) === 1);
+const runkeeper = data.filter(item => item.Apps.toLowerCase().indexOf('runkeeper') > -1);
+console.log(q1lowest.length);
+
+q1lowest.map(item => console.log(item.Age));
+
 const lessThen7 = q7mid.concat(q7low);
 console.log(q7low.length, q7mid.length);
 console.log(lessThen7.length);
 
 console.log(getAvg(lessThen7));
-// console.log(q7low.length, getAvg(q7low));
-// console.log(q7mid.length, getAvg(q7mid));
-// console.log(q7high.length, getAvg(q7high));
+console.log(q7low.length, getAvg(q7low));
+console.log(q7mid.length, getAvg(q7mid));
+console.log(q7high.length, getAvg(q7high));
 
-// console.log("low")
-// groupByUsage(q7low)
-// console.log("mid")
-// groupByUsage(q7mid)
-// console.log("high")
-// groupByUsage(q7high)
-// console.log(data.length);
+console.log("low")
+groupByUsage(q7low)
+console.log("mid")
+groupByUsage(q7mid)
+console.log("high")
+groupByUsage(q7high)
+console.log(data.length);
 const avg = getAvg(youngerThen29);
 const avg1 = getAvg(age30to39);
 const avg2 = getAvg(age40to49);
 const avg3 = getAvg(olderThen50);
 
-// const usage = groupByUsage(data);
+const usage = groupByUsage(data);
 const diff =  getDifferancePerQuestion(data);
 const median = getMedian(data);
 const standardDiviation = getStandardDeviation(data);
-
 
 console.log(avg);
 console.log(avg1);
 console.log(avg2);
 console.log(avg3);
 
-// const avgRunkeeper = getAvg(runkeeper);
-// console.log(avgRunkeeper);
-//getAppsUsed(data);
-// console.log(avgRunkeeper);
-// console.log(avg)
-// console.log(median);
-// console.log(diff);
-// console.log(standardDiviation);
-// printComments(data);
+const avgRunkeeper = getAvg(runkeeper);
+console.log(avgRunkeeper);
+getAppsUsed(data);
+console.log(avgRunkeeper);
+console.log(avg)
+console.log(median);
+console.log(diff);
+console.log(standardDiviation);
+printComments(data);
